@@ -2,8 +2,50 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:Sales.Desktop"
-             StartupUri="MainWindow.xaml">
+             xmlns:converters="clr-namespace:Sales.Desktop.Converters">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\ButtonStyle.xaml"/>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\TextBoxStyle.xaml"/>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\ComboBoxStyle.xaml"/>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\DatePickerStyle.xaml"/>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\CheckBoxStyle.xaml"/>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\TextBlockStyle.xaml"/>
+                <ResourceDictionary Source="\Sales.Desktop;component\Styles\PasswordBoxStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+            <converters:IndexConverter x:Key="IndexConverter"/>
+            <converters:BooleanToTextConverter x:Key="BooleanToTextConverter"/>
+            <converters:BooleanToColorConverter x:Key="BooleanToColorConverter"/>
+
+            <!-- Tahoma, Arial, Times New Roman,  Calibri Light, Courier New, Segoe UI -->
+            <FontFamily x:Key="FontFamilyDefault">Tahoma</FontFamily>
+
+            <SolidColorBrush x:Key="MyColor00">#ffffff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor01">#e6f2ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor02">#cce6ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor03">#b3d9ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor04">#99ccff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor05">#80bfff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor06">#66b3ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor07">#4da6ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor08">#3399ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor09">#1a8cff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor10">#0080ff</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor11">#0073e6</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor12">#0066cc</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor13">#0059b3</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor14">#004d99</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor15">#004080</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor16">#003366</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor17">#00264d</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor18">#001a33</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor19">#000d1a</SolidColorBrush>
+            <SolidColorBrush x:Key="MyColor20">#000000</SolidColorBrush>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

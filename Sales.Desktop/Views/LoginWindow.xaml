@@ -1,0 +1,49 @@
+﻿<Window x:Class="Sales.Desktop.Views.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sales.Desktop.Views"
+        xmlns:helpers="clr-namespace:Sales.Desktop.Helpers"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="LoginWindow" Height="400" Width="350">
+    <Grid>
+        <StackPanel Margin="10">
+            <TextBlock Style="{StaticResource TitleTextBlock}" Text="Đăng nhập" HorizontalAlignment="Center" Margin="0 0 0 20"/>
+            <Grid>
+                <TextBox Text="{Binding LoginRequest.Email, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource MyTextBox}" Padding="26,2,0,2"/>
+                <TextBlock Style="{StaticResource IconTextBlock}" Text="&#xE80B;" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <TextBlock Text="Số điện thoại/Email" IsHitTestVisible="False" Foreground="Gray" Margin="30,0,0,0" 
+                           VerticalAlignment="Center" Style="{StaticResource MyTextBlock}"
+                           Visibility="{Binding LoginRequest.Email, Converter={StaticResource StringToVisibilityConverter}}"/>
+            </Grid>
+            <Grid>
+                <PasswordBox Style="{StaticResource MyPasswordBox}" helpers:PasswordHelper.Attach="True" helpers:PasswordHelper.Password="{Binding LoginRequest.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="26,2,0,2"/>
+                <TextBlock Style="{StaticResource IconTextBlock}" Text="&#xE8D7;" Margin="10,0,0,0" HorizontalAlignment="Left"/>
+                <TextBlock Text="Mật khẩu" IsHitTestVisible="False" Foreground="Gray" Margin="30,0,0,0" 
+                           VerticalAlignment="Center" Style="{StaticResource MyTextBlock}"
+                           Visibility="{Binding LoginRequest.Password, Converter={StaticResource StringToVisibilityConverter}}"/>
+            </Grid>
+
+            <CheckBox Content="Ghi nhớ" Style="{StaticResource MyCheckBox}" IsChecked="{Binding Remember}" HorizontalAlignment="Center" Margin="5"/>
+
+            <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" Foreground="Red" HorizontalAlignment="Center" Margin="0 20 0 20"/>
+
+            <Button Command="{Binding LoginCommand}" IsDefault="True" Style="{StaticResource MainButton}" Margin="0 20 0 10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE748;" Style="{StaticResource IconTextBlock}" Foreground="White"/>
+                    <TextBlock Style="{StaticResource TextIconTextBlock}" Text="Đăng nhập" Foreground="White" Margin="5 0 0 0"/>
+                </StackPanel>
+            </Button>
+
+            <Button Command="{Binding CancelCommand}" Style="{StaticResource ExtraButton}" Margin="0 0 0 10">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="&#xE748;" Style="{StaticResource IconTextBlock}"/>
+                    <TextBlock Style="{StaticResource TextIconTextBlock}" Text="Hủy bỏ" Margin="5 0 0 0"/>
+                </StackPanel>
+            </Button>
+
+        </StackPanel>
+    </Grid>
+</Window>

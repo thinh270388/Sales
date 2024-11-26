@@ -1,0 +1,255 @@
+﻿<UserControl x:Class="Sales.Desktop.Views.UserView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Sales.Desktop.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <!-- Style for ListView -->
+        <Style TargetType="ListView">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Background" Value="{StaticResource MyColor01}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource MyColor15}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- Style for ListViewItem -->
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="White"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource MyColor15}"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="BorderBrush" Value="{StaticResource MyColor15}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style cho GridViewColumn Header -->
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Background" Value="{StaticResource MyColor15}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Người dùng-->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Tiêu đề và nút "Add" -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" Margin="10">
+                <TextBlock Text="Người dùng" Style="{StaticResource TitleTextBlock}" Foreground="{StaticResource MyColor15}"/>
+                <Button Content="Thêm người dùng" Style="{StaticResource MainButton}" Command="{Binding AddUserCommand}" Width="120" Margin="20 0 0 0"/>
+
+                <!-- Tổng số bản ghi -->
+                <TextBlock Grid.Row="2" FontWeight="SemiBold" Style="{StaticResource MyTextBlock}" Text="{Binding TotalRecords, StringFormat='Tổng số bản ghi: {0}'}" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="20 0 0 0"/>
+            </StackPanel>
+
+            <ListView Grid.Row="1" Margin="10" ItemsSource="{Binding Users}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}" >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="STT" Width="50">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource IndexConverter}}" Style="{StaticResource MyTextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="ID" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Id}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Họ và tên" DisplayMemberBinding="{Binding FullName}" Width="auto"/>
+                        <GridViewColumn Header="Tên đăng nhập" DisplayMemberBinding="{Binding UserName}" Width="auto"/>
+                        <GridViewColumn Header="Email" DisplayMemberBinding="{Binding Email}" Width="auto"/>
+                        <GridViewColumn Header="Số điện thoại" DisplayMemberBinding="{Binding PhoneNumber}" Width="auto"/>
+                        <GridViewColumn Header="Vai trò" DisplayMemberBinding="{Binding RoleName}" Width="auto"/>
+
+                        <!--<GridViewColumn Header="Refresh Token (RT)" DisplayMemberBinding="{Binding RefreshToken}" Width="auto"/>-->
+                        <GridViewColumn Header="Hạn RT" DisplayMemberBinding="{Binding RefreshTokenExpiryTime, StringFormat='{}{0:dd/MM/yyyy}'}" Width="auto"/>
+                        <GridViewColumn Header="Hệ thống" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding IsSystem, Converter={StaticResource BooleanToTextConverter}}" Foreground="{Binding IsSystem, Converter={StaticResource BooleanToColorConverter}}" Style="{StaticResource IconTextBlock}" FontSize="18" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Khóa" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding LockedEnable, Converter={StaticResource BooleanToTextConverter}}" Foreground="{Binding LockedEnable, Converter={StaticResource BooleanToColorConverter}}" Style="{StaticResource IconTextBlock}" FontSize="18" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <!-- Actions column with Edit and Delete buttons -->
+                        <GridViewColumn Header="Thao tác" Width="auto">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Button Content="Sửa" Width="40" Style="{StaticResource GridButton}" Background="Green"
+                                            Command="{Binding DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                            CommandParameter="{Binding}" />
+                                        <Button Content="Xóa" Margin="5 0 0 0" Width="40" Style="{StaticResource GridButton}" Background="OrangeRed"
+                                            Command="{Binding DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                            CommandParameter="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+
+            <!--Vai trò-->
+            <Grid Grid.Row="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <!-- Tiêu đề và nút "Add" -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" Margin="10">
+                    <TextBlock Text="Vai trò" Style="{StaticResource TitleTextBlock}" Foreground="{StaticResource MyColor15}"/>
+                    <Button Content="Thêm vai trò" Style="{StaticResource MainButton}" Command="{Binding AddCommand}" Width="120" Margin="50 0 0 0"/>
+                </StackPanel>
+
+                <ListView Grid.Row="1" Margin="10" ItemsSource="{Binding Roles}" SelectedItem="{Binding SelecteRole, Mode=TwoWay}" >
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="STT" Width="50">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource IndexConverter}}" Style="{StaticResource MyTextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="ID" Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Id}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Vai trò" DisplayMemberBinding="{Binding Name}" Width="auto"/>
+                                                       
+                            <GridViewColumn Header="Hệ thống" Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding IsSystem, Converter={StaticResource BooleanToTextConverter}}" Foreground="{Binding IsSystem, Converter={StaticResource BooleanToColorConverter}}" Style="{StaticResource IconTextBlock}" FontSize="18" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- Actions column with Edit and Delete buttons -->
+                            <GridViewColumn Header="Thao tác" Width="auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <Button Content="Sửa" Width="40" Style="{StaticResource GridButton}" Background="Green"
+                                Command="{Binding DataContext.EditRoleCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                CommandParameter="{Binding}" />
+                                            <Button Content="Xóa" Margin="5 0 0 0" Width="40" Style="{StaticResource GridButton}" Background="OrangeRed"
+                                Command="{Binding DataContext.DeleteRoleCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                CommandParameter="{Binding}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </Grid>
+
+            <!--Chức năng-->
+            <Grid Grid.Row="1">
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <!-- Tiêu đề và nút "Add" -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch" Grid.Row="0" Margin="10">
+                        <TextBlock Text="Chức năng" Style="{StaticResource TitleTextBlock}" Foreground="{StaticResource MyColor15}"/>
+                        <Button Content="Thêm chức năng" Style="{StaticResource MainButton}" Command="{Binding AddCommand}" Width="120" Margin="50 0 0 0"/>
+                    </StackPanel>
+
+                    <ListView Grid.Row="1" Margin="10" ItemsSource="{Binding Functions}" SelectedItem="{Binding SelecteFunction, Mode=TwoWay}" >
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="STT" Width="50">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Converter={StaticResource IndexConverter}}" Style="{StaticResource MyTextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="ID" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Id}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <GridViewColumn Header="Chức năng" DisplayMemberBinding="{Binding FullName}" Width="auto"/>
+
+                                <GridViewColumn Header="Hệ thống" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding IsSystem, Converter={StaticResource BooleanToTextConverter}}" Foreground="{Binding IsSystem, Converter={StaticResource BooleanToColorConverter}}" Style="{StaticResource IconTextBlock}" FontSize="18" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- Actions column with Edit and Delete buttons -->
+                                <GridViewColumn Header="Thao tác" Width="auto">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <Button Content="Sửa" Width="40" Style="{StaticResource GridButton}" Background="Green"
+                                Command="{Binding DataContext.EditFunctionCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                CommandParameter="{Binding}" />
+                                                <Button Content="Xóa" Margin="5 0 0 0" Width="40" Style="{StaticResource GridButton}" Background="OrangeRed"
+                                Command="{Binding DataContext.DeleteFunctionCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+                                CommandParameter="{Binding}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+
+</UserControl>

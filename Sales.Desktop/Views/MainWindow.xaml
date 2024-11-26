@@ -1,0 +1,140 @@
+﻿<Window x:Class="Sales.Desktop.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Sales.Desktop.Views"
+        xmlns:helpers="clr-namespace:Sales.Desktop.Helpers"
+        xmlns:viewModels="clr-namespace:Sales.Desktop.ViewModels"
+        xmlns:views="clr-namespace:Sales.Desktop.Views"
+        xmlns:converters="clr-namespace:Sales.Desktop.Converters"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        Title="Sales" Height="450" Width="800">
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModels:HomeViewModel}">
+            <views:HomeView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModels:UserViewModel}">
+            <views:UserView />
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type viewModels:HistoryViewModel}">
+            <views:HistoryView />
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="{Binding MenuWidth}" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <!--Cột trái-->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40" />
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <!--Header: Logo-->
+            <Grid Grid.Row="0" Background="{StaticResource MyColor18}">
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" >
+                    <TextBlock Style="{StaticResource IconTextBlock}" FontSize="24" Text="&#xE80F;" Foreground="White" />
+                    <TextBlock Style="{StaticResource TextIconTextBlock}" Text="SALES Desktop" FontSize="18" Foreground="White" Margin="10,0,0,0" Visibility="{Binding IsMenuExpanded, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                </StackPanel>
+            </Grid>
+
+            <!--Body: Menu-->
+            <Grid Grid.Row="1" Background="{StaticResource MyColor15}" Grid.RowSpan="2">
+                <StackPanel Margin="0,0,0,1">
+                    <ItemsControl ItemsSource="{Binding MenuControls}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Command="{Binding OnClicked}" BorderBrush="Transparent" Style="{StaticResource MainMenuButton}" HorizontalAlignment="Stretch" Background="Transparent" Margin="5" HorizontalContentAlignment="Left">
+                                    <StackPanel Orientation="Horizontal" Margin="10">
+                                        <TextBlock Style="{StaticResource IconTextBlock}" Text="{Binding IconText, StringFormat={}{0}}" Foreground="White" FontSize="24" ToolTip="{Binding ItemText}" />
+                                        <TextBlock Style="{StaticResource TextIconTextBlock}" Text="{Binding ItemText}" Foreground="White" FontSize="18" Margin="10 0 0 0" Visibility="{Binding DataContext.IsMenuExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                    </StackPanel>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+
+            <!--Footer: Thông tin-->
+            <Grid Grid.Row="2" Background="{StaticResource MyColor15}">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
+                    
+                    <!--Đăng xuất-->
+                    <Button Command="{Binding LogoutCommand}" Style="{StaticResource MainMenuButton}" Margin="5" HorizontalAlignment="Stretch">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBlock Text="&#xE748;" Style="{StaticResource IconTextBlock}" Foreground="White" FontSize="18" ToolTip="Đăng xuất"/>
+                            <TextBlock Style="{StaticResource TextIconTextBlock}" Text="Đăng xuất" Foreground="White" Margin="5 0 0 0" Visibility="{Binding DataContext.IsMenuExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!--Phiên bản-->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 10">
+                        <TextBlock Text="&#xE909;" Style="{StaticResource IconTextBlock}" Foreground="White" Visibility="{Binding DataContext.IsMenuExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}" FontSize="18"/>
+                        <TextBlock Text="Phiên bản: "  Margin="5 0 0 0" Style="{StaticResource TextIconTextBlock}" Foreground="White" Visibility="{Binding DataContext.IsMenuExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <TextBlock Text="{Binding Version}" Style="{StaticResource TextIconTextBlock}" Foreground="White" ToolTip="Phiên bản" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!--Cột phải-->
+        <Grid Grid.Column="1">
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--Thanh Tiêu đề-->
+                <Grid VerticalAlignment="Top" Height="40" Background="WhiteSmoke">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="auto" />
+                        <ColumnDefinition Width="auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="0" Command="{Binding ToggleMenuCommand}" Width="40" BorderBrush="Transparent" >
+                        <TextBlock Style="{StaticResource IconTextBlock}" Text="&#xE700;" />
+                    </Button>
+
+                    <TextBlock Grid.Column="1" Style="{StaticResource MyTextBlock}" Text="Dashboard" VerticalAlignment="Center" Margin="10,0" />
+
+                    <!--Thời gian-->
+                    <TextBlock Grid.Column="2" Text="{Binding CurrentTime}" VerticalAlignment="Center" Margin="10,0" Style="{StaticResource MyTextBlock}" />
+
+                    <!--User Login-->
+                    <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock Style="{StaticResource IconTextBlock}" Text="&#xEA8C;" Foreground="Red"/>
+                        <TextBlock Text="{Binding LoginResponse.User.FullName}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource MyTextBlock}" Foreground="Red" FontWeight="Bold"/>
+                    </StackPanel>
+
+                    <!--User Role-->
+                    <StackPanel Grid.Column="5" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10 0 10 0">
+                        <TextBlock Style="{StaticResource IconTextBlock}" Text="&#xE83D;" Foreground="Green"/>
+                        <TextBlock Text="{Binding LoginResponse.Role.Name}" HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource MyTextBlock}" Foreground="Green" FontWeight="Bold"/>
+                    </StackPanel>
+                </Grid>
+
+                <!--Nội dung điều hướng-->
+                <ContentControl Grid.Row="1" Content="{Binding NavigationService.CurrentViewModel}" />
+            </Grid>
+        </Grid>
+
+    </Grid>
+</Window>
